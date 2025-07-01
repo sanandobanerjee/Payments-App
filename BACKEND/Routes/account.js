@@ -22,8 +22,11 @@ router.post("/transfer",authMiddleware,async(req,res)=>{
 
     const account = await Account.findOne({userId:req.userId}).session(session);
 
-    //checking existence of enough balance and account itself
-    if(!account || account.balance<amount) {
+    //checking existence of enough balance
+    //checking existence of account
+    //checking if amount value is positive(or else it can be used to steal)
+
+    if(!account || account.balance<amount || account > 0) {
         await session.abortTransaction();
         return res.status(400).json({
             message:"Insufficient balance"
